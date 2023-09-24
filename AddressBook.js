@@ -1,5 +1,3 @@
-var message = 'Hello World!';
-console.log(message);
 var Contact = /** @class */ (function () {
     // public constructor(name: string, lastName: string) {
     //     this.name = name;
@@ -27,4 +25,4 @@ console.log(Person.getLastName());
 console.log(Person.getName());
 Person.setName("Mietek");
 console.log(Person.getName());
-//# sourceMappingURL=helloworld.js.map
+//# sourceMappingURL=AddressBook.js.map
