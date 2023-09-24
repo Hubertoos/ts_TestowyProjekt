@@ -3,10 +3,10 @@ var Contact = /** @class */ (function () {
     //     this.name = name;
     //     this.lastName = lastName;
     // }
-    function Contact(name, lastName, data) {
+    function Contact(name, lastName) {
         this.name = name;
         this.lastName = lastName;
-        this.date = data;
+        this.setThisDate();
     }
     Contact.prototype.getName = function () {
         return this.name;
@@ -17,9 +17,13 @@ var Contact = /** @class */ (function () {
     Contact.prototype.setName = function (newName) {
         this.name = newName;
     };
+    Contact.prototype.setThisDate = function () {
+        this.date = new Date();
+    };
     return Contact;
 }());
-var Person = new Contact("Jan", "Kowalski", new Date("2023-09-15"));
+//const Person = new Contact("Jan", "Kowalski", new Date("2023-09-15"));
+var Person = new Contact("Jan", "Kowalski");
 console.log(Person);
 console.log(Person.getLastName());
 console.log(Person.getName());

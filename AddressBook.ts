@@ -10,10 +10,10 @@ class Contact {
     //     this.lastName = lastName;
     // }
 
-    public constructor(name: string, lastName: string, data: Date) {
+    public constructor(name: string, lastName: string) {
         this.name = name;
         this.lastName = lastName;
-        this.date = data;
+        this.setThisDate();
     }
 
     public getName(): string {
@@ -27,10 +27,17 @@ class Contact {
     public setName(newName: string) {
         this.name=newName;
     }
+
+    private setThisDate() {
+        this.date = new Date();
+    }
 }
 
-const Person = new Contact("Jan", "Kowalski", new Date("2023-09-15"));
+//const Person = new Contact("Jan", "Kowalski", new Date("2023-09-15"));
+const Person = new Contact("Jan", "Kowalski" );
+
 console.log(Person);
+
 console.log(Person.getLastName());
 console.log(Person.getName());
 Person.setName("Mietek");
