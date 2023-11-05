@@ -57,12 +57,11 @@ var Group = /** @class */ (function () {
         this.contactList.push(newContact);
     };
     Group.prototype.removeContactFromGroup = function (rmvContact) {
-        var test = this.contactList.map(function (cList) {
+        this.contactList = this.contactList.filter(function (cList) {
             console.log(cList.getUUID() + '|' + rmvContact.getUUID());
             //cList.getUUID() != rmvContact.getUUID();
-            cList.setEmail(rmvContact.getName());
+            return JSON.stringify(cList) !== JSON.stringify(rmvContact);
         });
-        console.log(test);
     };
     Group.prototype.findContactInGroupByUIID = function (name, lastName, findUUID) {
         //return this.contactList.forEach( c => console.log(c.getUUID()));
@@ -112,6 +111,6 @@ AdresBuk.addGroup(Grupa1);
 // console.log(Grupa.findContactInGroupByUIID('1234-5678-9012'));
 console.log("Remove:");
 Grupa.addContactToGroup(Person);
-Grupa.removeContactFromGroup(Person1);
+Grupa.removeContactFromGroup(Person);
 console.log(Grupa);
 //# sourceMappingURL=AddressBook.js.map

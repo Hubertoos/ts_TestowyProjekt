@@ -87,11 +87,12 @@ class Group {
     }
 
     public removeContactFromGroup(rmvContact: Contact) {
-        this.contactList.filter(cList => {
+        this.contactList = this.contactList.filter(cList => {
             console.log(cList.getUUID()+'|'+ rmvContact.getUUID());
             //cList.getUUID() != rmvContact.getUUID();
-            cList!==rmvContact;
+            return JSON.stringify(cList) !== JSON.stringify(rmvContact);
         });
+        
     }
 
 
@@ -153,6 +154,6 @@ AdresBuk.addGroup(Grupa1);
 
 console.log("Remove:");
 Grupa.addContactToGroup(Person);
-Grupa.removeContactFromGroup(Person1);
+Grupa.removeContactFromGroup(Person);
 console.log(Grupa);
 
