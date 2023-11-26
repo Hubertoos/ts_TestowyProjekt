@@ -48,11 +48,17 @@ var Contact = /** @class */ (function () {
     return Contact;
 }());
 var Group = /** @class */ (function () {
-    function Group(groupName, groupUUID) {
+    function Group(groupName, groupUUID, contactList) {
         this.groupName = groupName;
         this.groupUUID = groupUUID;
-        this.contactList = [];
+        this.contactList = contactList;
     }
+    Group.prototype.setGroupName = function (newName) {
+        this.groupName = newName;
+    };
+    Group.prototype.getGroupName = function () {
+        return this.groupName;
+    };
     Group.prototype.addContactToGroup = function (newContact) {
         this.contactList.push(newContact);
     };
@@ -64,7 +70,6 @@ var Group = /** @class */ (function () {
         });
     };
     Group.prototype.findContactInGroupByUIID = function (name, lastName, findUUID) {
-        //return this.contactList.forEach( c => console.log(c.getUUID()));
         return this.contactList.some(function (cntct) { return cntct.getUUID() == findUUID; });
     };
     return Group;
@@ -93,8 +98,8 @@ Person.setEmail('Jan.Kowalski@gmail.com');
 // console.log(Person);
 Person.setExternalUUID('9876-5432-1098');
 // console.log(Person.getUUID());
-var Grupa = new Group('Nowa grupa', 'Nowy UUID');
-var Grupa1 = new Group('Grupa1', 'UUID_1111');
+var Grupa = new Group('Nowa grupa', 'Nowy UUID', []);
+var Grupa1 = new Group('Grupa1', 'UUID_1111', []);
 // console.log(Grupa);
 Grupa.addContactToGroup(Person);
 // console.log(Grupa);

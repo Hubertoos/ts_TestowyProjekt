@@ -73,13 +73,21 @@ class Contact {
 class Group {
 
     contactList: Contact[];
-    groupName: string;
+    private groupName: string;
     groupUUID:string;
 
-    public constructor (groupName: string, groupUUID: string) {
+    public constructor (groupName: string, groupUUID: string, contactList: []) {
         this.groupName = groupName;
         this.groupUUID = groupUUID;
-        this.contactList = [];
+        this.contactList = contactList;
+    }
+
+    public setGroupName(newName: string) {
+        this.groupName = newName;
+    }
+
+    public getGroupName(): string {
+        return this.groupName;
     }
 
     public addContactToGroup(newContact: Contact) {
@@ -98,7 +106,6 @@ class Group {
 
 
     public findContactInGroupByUIID (name? : string, lastName? : string, findUUID?: string) {
-        //return this.contactList.forEach( c => console.log(c.getUUID()));
         return this.contactList.some(cntct => cntct.getUUID()==findUUID);
     }
 }
@@ -134,8 +141,8 @@ Person.setEmail('Jan.Kowalski@gmail.com');
 Person.setExternalUUID('9876-5432-1098');
 // console.log(Person.getUUID());
 
-const Grupa = new Group('Nowa grupa', 'Nowy UUID');
-const Grupa1 = new Group('Grupa1','UUID_1111');
+const Grupa = new Group('Nowa grupa', 'Nowy UUID', []);
+const Grupa1 = new Group('Grupa1','UUID_1111',[]);
 // console.log(Grupa);
 Grupa.addContactToGroup(Person);
 // console.log(Grupa);
