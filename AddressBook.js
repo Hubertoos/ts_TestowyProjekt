@@ -69,7 +69,7 @@ var Group = /** @class */ (function () {
             return JSON.stringify(cList) !== JSON.stringify(rmvContact);
         });
     };
-    Group.prototype.findContactInGroupByUIID = function (name, lastName, findUUID) {
+    Group.prototype.findContactInGroupByUIID = function (findUUID) {
         return this.contactList.some(function (cntct) { return cntct.getUUID() == findUUID; });
     };
     return Group;
@@ -81,6 +81,26 @@ var AddressBook = /** @class */ (function () {
     }
     AddressBook.prototype.addContact = function (newContact) {
         this.allContacts.push(newContact);
+    };
+    AddressBook.prototype.addContact2AddresBook = function (contact, group) {
+        this.allContacts.push(contact);
+        this.allGroups.forEach(function (groupEntries) {
+            if (groupEntries.getGroupName() === group.getGroupName()) {
+                groupEntries.addContactToGroup(contact);
+            }
+        });
+    };
+    AddressBook.prototype.removeContractFromAddresBook = function (contact) {
+        this.allContacts = this.allContacts.filter(function (cList) {
+            console.log(cList.getUUID() + '|' + contact.getUUID());
+            //cList.getUUID() != rmvContact.getUUID();
+            return JSON.stringify(cList) !== JSON.stringify(contact);
+        });
+        this.allGroups.forEach(function (group) {
+            if (group.findContactInGroupByUIID('1')) {
+                group.removeContactFromGroup(contact);
+            }
+        });
     };
     AddressBook.prototype.addGroup = function (newGroup) {
         this.allGroups.push(newGroup);
@@ -103,7 +123,7 @@ var Grupa1 = new Group('Grupa1', 'UUID_1111', []);
 // console.log(Grupa);
 Grupa.addContactToGroup(Person);
 // console.log(Grupa);
-var Person1 = new Contact("Janina", "Kowalska");
+var Person1 = new Contact("Jagoda", "Kowalska");
 Grupa.addContactToGroup(Person1);
 console.log(Grupa);
 Grupa1.addContactToGroup(Person);
@@ -111,11 +131,15 @@ var AdresBuk = new AddressBook();
 AdresBuk.addContact(Person);
 AdresBuk.addGroup(Grupa);
 AdresBuk.addGroup(Grupa1);
-// console.log(AdresBuk);
+AdresBuk.addContact2AddresBook(Person1, Grupa1);
+console.log(AdresBuk);
+console.log("ostatni:");
+console.log(AdresBuk.allGroups.forEach(function (a) { return a.getGroupName(); }));
 // console.log(AdresBuk.allGroups.forEach(e => e.contactList.forEach(c => console.log(c.getName()))));
 // console.log(Grupa.findContactInGroupByUIID('1234-5678-9012'));
-console.log("Remove:");
-Grupa.addContactToGroup(Person);
-Grupa.removeContactFromGroup(Person);
-console.log(Grupa);
+// console.log("Remove:");
+// Grupa.addContactToGroup(Person);
+// Grupa.removeContactFromGroup(Person);
+// console.log(Grupa);
+// console.log(Grupa.findContactInGroupByUIID('1234-5678-9012'));
 //# sourceMappingURL=AddressBook.js.map

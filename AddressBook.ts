@@ -105,7 +105,7 @@ class Group {
 
 
 
-    public findContactInGroupByUIID (name? : string, lastName? : string, findUUID?: string) {
+    public findContactInGroupByUIID (findUUID?: string) {
         return this.contactList.some(cntct => cntct.getUUID()==findUUID);
     }
 }
@@ -121,6 +121,28 @@ class AddressBook {
 
     public addContact(newContact: Contact) {
         this.allContacts.push(newContact);
+    }
+
+    public addContact2AddresBook(contact: Contact, group: Group) {
+        this.allContacts.push(contact);
+        this.allGroups.forEach(groupEntries => {
+            if (groupEntries.getGroupName()===group.getGroupName()) {
+                groupEntries.addContactToGroup(contact);
+            }
+        });
+    }
+
+    public removeContractFromAddresBook(contact: Contact) {
+        this.allContacts = this.allContacts.filter(cList => {
+            console.log(cList.getUUID()+'|'+ contact.getUUID());
+            //cList.getUUID() != rmvContact.getUUID();
+            return JSON.stringify(cList) !== JSON.stringify(contact);
+        });
+        this.allGroups.forEach(group => {
+            if (group.findContactInGroupByUIID('1')) {
+                group.removeContactFromGroup(contact);
+            }
+        });
     }
 
     public addGroup(newGroup: Group){
@@ -146,7 +168,7 @@ const Grupa1 = new Group('Grupa1','UUID_1111',[]);
 // console.log(Grupa);
 Grupa.addContactToGroup(Person);
 // console.log(Grupa);
-const Person1 = new Contact("Janina", "Kowalska" );
+const Person1 = new Contact("Jagoda", "Kowalska" );
 Grupa.addContactToGroup(Person1);
 console.log(Grupa);
 Grupa1.addContactToGroup(Person);
@@ -155,12 +177,15 @@ const AdresBuk = new AddressBook();
 AdresBuk.addContact(Person);
 AdresBuk.addGroup(Grupa);
 AdresBuk.addGroup(Grupa1);
-// console.log(AdresBuk);
+AdresBuk.addContact2AddresBook(Person1,Grupa1);
+console.log(AdresBuk);
+console.log("ostatni:");
+console.log(AdresBuk.allGroups.forEach(a => a.getGroupName()));
 // console.log(AdresBuk.allGroups.forEach(e => e.contactList.forEach(c => console.log(c.getName()))));
 // console.log(Grupa.findContactInGroupByUIID('1234-5678-9012'));
 
-console.log("Remove:");
-Grupa.addContactToGroup(Person);
-Grupa.removeContactFromGroup(Person);
-console.log(Grupa);
-
+// console.log("Remove:");
+// Grupa.addContactToGroup(Person);
+// Grupa.removeContactFromGroup(Person);
+// console.log(Grupa);
+// console.log(Grupa.findContactInGroupByUIID('1234-5678-9012'));
