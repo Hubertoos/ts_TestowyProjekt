@@ -104,6 +104,16 @@ var AddressBook = /** @class */ (function () {
     };
     AddressBook.prototype.addGroup = function (newGroup) {
         this.allGroups.push(newGroup);
+        //czy wszystkie kontakty z grupy dodać do listy kontaktów, o ile jeszcze ich tam nie ma?
+        //czy sprawdzać istnienie grupy przed jej dodaniem?
+    };
+    AddressBook.prototype.removeGroup = function (rmvGroup) {
+        console.log('Group removed:' + rmvGroup);
+    };
+    AddressBook.prototype.findContact = function (phrase) {
+        console.log('Looking for contact:' + phrase);
+        //przeszukanie wszystkich kontaktów/kontaktów w grupach? czy imie/nazwisko/uiid/email zawierają dany ciąg?
+        //zwraca obiekt z kontaktami Contacts[Contact{name:"Mietek"},Contact{name:'Janek}]?
     };
     return AddressBook;
 }());
@@ -132,10 +142,14 @@ AdresBuk.addContact(Person);
 AdresBuk.addGroup(Grupa);
 AdresBuk.addGroup(Grupa1);
 AdresBuk.addContact2AddresBook(Person1, Grupa1);
+// console.log("ostatni:");
+// console.log(AdresBuk.allGroups.forEach(a => a.getGroupName()));
+console.log(AdresBuk.findContact('szukam!'));
+AdresBuk.allContacts.forEach(function (a) { return console.log(a.getName()); });
+//Person.setName('Mieczysław');
 console.log(AdresBuk);
-console.log("ostatni:");
-console.log(AdresBuk.allGroups.forEach(function (a) { return a.getGroupName(); }));
-// console.log(AdresBuk.allGroups.forEach(e => e.contactList.forEach(c => console.log(c.getName()))));
+AdresBuk.allGroups.forEach(function (e) { return e.contactList.forEach(function (c) { return console.log(c.getName()); }); });
+AdresBuk.allGroups.forEach(function (e) { return console.log(e.getGroupName()); });
 // console.log(Grupa.findContactInGroupByUIID('1234-5678-9012'));
 // console.log("Remove:");
 // Grupa.addContactToGroup(Person);

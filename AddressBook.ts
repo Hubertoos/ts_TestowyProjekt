@@ -8,12 +8,7 @@ class Contact {
     private modDate: Date;
     private uuid: string;
 
-    // public constructor(name: string, lastName: string) {
-    //     this.name = name;
-    //     this.lastName = lastName;
-    // }
-
-    public constructor(name: string, lastName: string) {
+    constructor(name: string, lastName: string) {
         this.name = name;
         this.lastName = lastName;
         this.createDate = new Date();
@@ -22,9 +17,14 @@ class Contact {
         this.email = '';
     }
  
-    public setName(newName: string) {
-            this.name=newName;
-        }
+    // set name(newName: string) {
+    //     // dodatkowa logika
+    //     this._name=newName;
+    // }
+ 
+    setName(newName: string) {
+        this.name=newName;
+    }
 
     public getName(): string {
         return this.name;
@@ -47,7 +47,7 @@ class Contact {
     }
 
     public setUUID() {
-        let calcUUID = '1234-5678-9012';
+        let calcUUID = '1234-5678-9012'; // <=== npm uuid
         this.uuid = calcUUID;
     }
 
@@ -71,13 +71,10 @@ class Contact {
 
 
 class Group {
-
     contactList: Contact[];
-    private groupName: string;
     groupUUID:string;
 
-    public constructor (groupName: string, groupUUID: string, contactList: []) {
-        this.groupName = groupName;
+    public constructor (private groupName: string, groupUUID: string, contactList: Contact[]) {
         this.groupUUID = groupUUID;
         this.contactList = contactList;
     }
@@ -96,16 +93,16 @@ class Group {
 
     public removeContactFromGroup(rmvContact: Contact) {
         this.contactList = this.contactList.filter(cList => {
-            console.log(cList.getUUID()+'|'+ rmvContact.getUUID());
+            // console.log(cList.getUUID()+'|'+ rmvContact.getUUID());
             //cList.getUUID() != rmvContact.getUUID();
+
+            // TODO: porównać po uuid
             return JSON.stringify(cList) !== JSON.stringify(rmvContact);
         });
         
     }
 
-
-
-    public findContactInGroupByUIID (findUUID?: string) {
+    public findContactInGroupByUIID (findUUID?: string): boolean { // TODO: rename: isContactInGroup
         return this.contactList.some(cntct => cntct.getUUID()==findUUID);
     }
 }
@@ -123,6 +120,12 @@ class AddressBook {
         this.allContacts.push(newContact);
     }
 
+    // TODO: naprawa potencjalnego buga
+    // stworzyć const c = Contact()
+    // stworzyć const g = Group()
+    // AddressBook.addContact(c);
+    // AddressBook.addContact2AddresBook(c, g);
+
     public addContact2AddresBook(contact: Contact, group: Group) {
         this.allContacts.push(contact);
         this.allGroups.forEach(groupEntries => {
@@ -132,6 +135,7 @@ class AddressBook {
         });
     }
 
+    // TODO: literówka: Contract
     public removeContractFromAddresBook(contact: Contact) {
         this.allContacts = this.allContacts.filter(cList => {
             console.log(cList.getUUID()+'|'+ contact.getUUID());
@@ -139,7 +143,7 @@ class AddressBook {
             return JSON.stringify(cList) !== JSON.stringify(contact);
         });
         this.allGroups.forEach(group => {
-            if (group.findContactInGroupByUIID('1')) {
+            if (group.findContactInGroupByUIID(contact.getUUID())) {
                 group.removeContactFromGroup(contact);
             }
         });
@@ -147,7 +151,22 @@ class AddressBook {
 
     public addGroup(newGroup: Group){
         this.allGroups.push(newGroup);
+        //czy wszystkie kontakty z grupy dodać do listy kontaktów, o ile jeszcze ich tam nie ma?
+        //czy sprawdzać istnienie grupy przed jej dodaniem?
     }
+
+    public removeGroup(rmvGroup: Group) {
+        console.log('Group removed:' + rmvGroup);
+    }
+
+    public findContact(phrase: string) {
+        console.log('Looking for contact:' + phrase);
+        //przeszukanie wszystkich kontaktów/kontaktów w grupach? czy imie/nazwisko/uiid/email zawierają dany ciąg?
+        //zwraca obiekt z kontaktami Contacts[Contact{name:"Mietek"},Contact{name:'Janek}]?
+    }
+
+
+    // 
 }
 
 
@@ -178,10 +197,15 @@ AdresBuk.addContact(Person);
 AdresBuk.addGroup(Grupa);
 AdresBuk.addGroup(Grupa1);
 AdresBuk.addContact2AddresBook(Person1,Grupa1);
+
+// console.log("ostatni:");
+// console.log(AdresBuk.allGroups.forEach(a => a.getGroupName()));
+console.log(AdresBuk.findContact('szukam!'));
+AdresBuk.allContacts.forEach(a => console.log(a.getName()));
+//Person.setName('Mieczysław');
 console.log(AdresBuk);
-console.log("ostatni:");
-console.log(AdresBuk.allGroups.forEach(a => a.getGroupName()));
-// console.log(AdresBuk.allGroups.forEach(e => e.contactList.forEach(c => console.log(c.getName()))));
+AdresBuk.allGroups.forEach(e => e.contactList.forEach(c => console.log(c.getName())));
+AdresBuk.allGroups.forEach(e => console.log(e.getGroupName()));
 // console.log(Grupa.findContactInGroupByUIID('1234-5678-9012'));
 
 // console.log("Remove:");
