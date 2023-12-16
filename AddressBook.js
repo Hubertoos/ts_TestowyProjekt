@@ -17,19 +17,20 @@ var AddressBook = /** @class */ (function () {
     // AddressBook.addContact(c);
     // AddressBook.addContact2AddresBook(c, g);
     AddressBook.prototype.addContact2AddresBook = function (contact, group) {
-        this.allContacts.push(contact);
+        if (!this.isContactInAddressBook(contact)) {
+            this.allContacts.push(contact);
+        }
         this.allGroups.forEach(function (groupEntries) {
             if (groupEntries.groupName === group.groupName) {
                 groupEntries.addContactToGroup(contact);
             }
         });
     };
-    // TODO: literówka: Contract
-    AddressBook.prototype.removeContractFromAddresBook = function (contact) {
+    // TODO: literówka: Contract > OK
+    AddressBook.prototype.removeContactFromAddresBook = function (contact) {
         this.allContacts = this.allContacts.filter(function (cList) {
             console.log(cList.uuid + '|' + contact.uuid);
-            //cList.getUUID() != rmvContact.getUUID();
-            return JSON.stringify(cList) !== JSON.stringify(contact);
+            return cList.uuid !== contact.uuid;
         });
         this.allGroups.forEach(function (group) {
             if (group.isContactInGroup(contact.uuid)) {
@@ -38,17 +39,45 @@ var AddressBook = /** @class */ (function () {
         });
     };
     AddressBook.prototype.addGroup = function (newGroup) {
-        this.allGroups.push(newGroup);
+        var _this = this;
+        if (!this.isGroupInAddressBook(newGroup)) {
+            this.allGroups.push(newGroup);
+        }
+        newGroup.contactList.forEach(function (groupContact) {
+            if (!_this.isContactInAddressBook(groupContact)) {
+                _this.allContacts.push(groupContact);
+            }
+            else {
+                console.log('ten kontakt już istnieje w tabeli kontaktów: ' + groupContact.uuid);
+            }
+        });
         //czy wszystkie kontakty z grupy dodać do listy kontaktów, o ile jeszcze ich tam nie ma?
         //czy sprawdzać istnienie grupy przed jej dodaniem?
     };
     AddressBook.prototype.removeGroup = function (rmvGroup) {
         console.log('Group removed:' + rmvGroup);
+        this.allGroups = this.allGroups.filter(function (grp) {
+            return grp.groupUUID !== rmvGroup.groupUUID;
+        });
     };
     AddressBook.prototype.findContact = function (phrase) {
         console.log('Looking for contact:' + phrase);
+        var foundContacts = [];
+        this.allContacts.forEach(function (cntct) {
+            var fullString = cntct.name + '|' + cntct.lastName + '|' + cntct.email;
+            if (fullString.indexOf(phrase) > -1) {
+                foundContacts.push(cntct);
+            }
+        });
+        return foundContacts;
         //przeszukanie wszystkich kontaktów/kontaktów w grupach? czy imie/nazwisko/uiid/email zawierają dany ciąg?
         //zwraca obiekt z kontaktami Contacts[Contact{name:"Mietek"},Contact{name:'Janek}]?
+    };
+    AddressBook.prototype.isContactInAddressBook = function (checkContact) {
+        return this.allContacts.some(function (cntct) { return checkContact.uuid === cntct.uuid; });
+    };
+    AddressBook.prototype.isGroupInAddressBook = function (checkGroup) {
+        return this.allGroups.some(function (grp) { return checkGroup.groupUUID === grp.groupUUID; });
     };
     return AddressBook;
 }());

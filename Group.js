@@ -27,6 +27,13 @@ var Group = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Group.prototype, "groupUUID", {
+        get: function () {
+            return this._groupUUID;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Group.prototype.addContactToGroup = function (newContact) {
         this._contactList.push(newContact);
     };

@@ -27,6 +27,10 @@ export class Group {
         return this._contactList;
     }
 
+    get groupUUID() {
+        return this._groupUUID;
+    }
+
     addContactToGroup(newContact: Contact) {
         this._contactList.push(newContact);
     }
@@ -38,7 +42,7 @@ export class Group {
         
     }
 
-    isContactInGroup (findUUID?: string): boolean { // TODO: rename: isContactInGroup
+    isContactInGroup (findUUID?: string): boolean { // TODO: rename: isContactInGroup > OK
         return this._contactList.some(cntct => cntct.uuid==findUUID);
     }
 }

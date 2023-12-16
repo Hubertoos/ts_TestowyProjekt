@@ -24,7 +24,10 @@ export class AddressBook {
     // AddressBook.addContact2AddresBook(c, g);
 
     addContact2AddresBook(contact: Contact, group: Group) {
-        this.allContacts.push(contact);
+        if (!this.isContactInAddressBook(contact)) {
+            this.allContacts.push(contact);
+        }
+        
         this.allGroups.forEach(groupEntries => {
             if (groupEntries.groupName===group.groupName) {
                 groupEntries.addContactToGroup(contact);
@@ -32,12 +35,11 @@ export class AddressBook {
         });
     }
 
-    // TODO: literówka: Contract
-    removeContractFromAddresBook(contact: Contact) {
+    // TODO: literówka: Contract > OK
+    removeContactFromAddresBook(contact: Contact) {
         this.allContacts = this.allContacts.filter(cList => {
             console.log(cList.uuid+'|'+ contact.uuid);
-            //cList.getUUID() != rmvContact.getUUID();
-            return JSON.stringify(cList) !== JSON.stringify(contact);
+            return cList.uuid !== contact.uuid;
         });
         this.allGroups.forEach(group => {
             if (group.isContactInGroup(contact.uuid)) {
@@ -47,21 +49,45 @@ export class AddressBook {
     }
 
     addGroup(newGroup: Group){
-        this.allGroups.push(newGroup);
+        if (!this.isGroupInAddressBook(newGroup)) {
+            this.allGroups.push(newGroup);
+        }
+        newGroup.contactList.forEach(groupContact => {
+            if (!this.isContactInAddressBook(groupContact)) {
+                this.allContacts.push(groupContact);
+            } else {
+                console.log('ten kontakt już istnieje w tabeli kontaktów: ' + groupContact.uuid);
+            }
+        });
         //czy wszystkie kontakty z grupy dodać do listy kontaktów, o ile jeszcze ich tam nie ma?
         //czy sprawdzać istnienie grupy przed jej dodaniem?
     }
 
     removeGroup(rmvGroup: Group) {
         console.log('Group removed:' + rmvGroup);
+        this.allGroups = this.allGroups.filter(grp => {
+            return grp.groupUUID!==rmvGroup.groupUUID;
+        });
     }
 
-    findContact(phrase: string) {
+    findContact(phrase: string): Contact[] {
         console.log('Looking for contact:' + phrase);
+        const foundContacts = [];
+        this.allContacts.forEach(cntct => {
+            const fullString = cntct.name +'|'+ cntct.lastName + '|'+ cntct.email
+            if(fullString.indexOf(phrase)>-1) {
+                foundContacts.push(cntct);
+            }        });
+            return foundContacts;
         //przeszukanie wszystkich kontaktów/kontaktów w grupach? czy imie/nazwisko/uiid/email zawierają dany ciąg?
         //zwraca obiekt z kontaktami Contacts[Contact{name:"Mietek"},Contact{name:'Janek}]?
     }
 
+    isContactInAddressBook (checkContact: Contact) {
+        return this.allContacts.some(cntct => checkContact.uuid === cntct.uuid);
+    }
 
-    // 
+    isGroupInAddressBook (checkGroup: Group) {
+        return this.allGroups.some(grp => checkGroup.groupUUID === grp.groupUUID);
+    }
 }
